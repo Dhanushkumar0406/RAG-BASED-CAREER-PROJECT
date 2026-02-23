@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 
+from app.routes import chat_bp
+
 
 def create_app() -> Flask:
     """Application factory returning a configured Flask app."""
@@ -10,6 +12,16 @@ def create_app() -> Flask:
     @app.route("/health", methods=["GET"])
     def health():
         return {"status": "ok"}, 200
+
+    @app.route("/", methods=["GET"])
+    def index():
+        return {
+            "status": "ok",
+            "message": "Backend running.",
+        }, 200
+
+    # Register blueprints
+    app.register_blueprint(chat_bp)
 
     return app
 

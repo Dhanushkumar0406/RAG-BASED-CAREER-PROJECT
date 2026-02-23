@@ -1,6 +1,9 @@
+import os
+
 from app import app
 
 
 if __name__ == "__main__":
-    # Enable debug for local development; disable or set via env in prod.
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # Allow overriding port via environment; default to 9000 for this project.
+    port = int(os.getenv("PORT", "9000"))
+    app.run(host="0.0.0.0", port=port, debug=True)
