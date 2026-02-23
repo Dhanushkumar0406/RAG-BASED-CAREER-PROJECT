@@ -24,8 +24,11 @@ def chat():
         return jsonify({"error": "question is required"}), 400
 
     pipeline = _get_pipeline()
-    context_text, hits = pipeline.retrieve(question)
-    answer, model_used = generate_response(context_text, question)
+    try:
+        context_text, hits = pipeline.retrieve(question)
+        answer, model_used = generate_response(context_text, question)
+    except Exception as exc:  # fallback so frontend gets a friendly message
+        return jsonify({"error": str(exc)}), 502
 
     return jsonify(
         {
