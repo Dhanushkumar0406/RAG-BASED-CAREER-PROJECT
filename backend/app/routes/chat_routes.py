@@ -1,7 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from flask import Blueprint, jsonify, request
 
-from app.services.rag_pipeline import RagPipeline
-from app.services.llm_service import generate_response
+if TYPE_CHECKING:
+    from app.services.rag_pipeline import RagPipeline
 
 chat_bp = Blueprint("chat", __name__)
 
@@ -12,12 +16,16 @@ _pipeline = None
 def _get_pipeline() -> RagPipeline:
     global _pipeline
     if _pipeline is None:
+        # Heavy imports happen only when the first chat request arrives, keeping health checks snappy.
+        from app.services.rag_pipeline import RagPipeline
         _pipeline = RagPipeline()
     return _pipeline
 
 
 @chat_bp.route("/chat", methods=["POST"])
 def chat():
+    # Import here to avoid pulling genai stack unless we actually need it.
+    from app.services.llm_service import generate_response
     payload = request.get_json(silent=True) or {}
     question = (payload.get("question") or "").strip()
     if not question:
