@@ -4,7 +4,7 @@ import Loader from "./Loader";
 import useChat from "../hooks/useChat";
 
 const ChatBox = () => {
-  const { messages, status, loading, sendMessage } = useChat();
+  const { messages, status, loading, sendMessage, persona, setPersona } = useChat();
   const [input, setInput] = useState("");
   const listRef = useRef(null);
 
@@ -32,6 +32,18 @@ const ChatBox = () => {
       <div className="chat-status">
         <span className={`status-dot ${status === "online" ? "ok" : "warn"}`} />
         {status === "online" ? "Backend online" : "Backend offline"}
+        <div className="persona">
+          <label htmlFor="persona">Persona:</label>
+          <select
+            id="persona"
+            value={persona}
+            onChange={(e) => setPersona(e.target.value)}
+            disabled={loading}
+          >
+            <option value="concise_career_coach">Concise coach</option>
+            <option value="detailed_analyst">Detailed analyst</option>
+          </select>
+        </div>
       </div>
       <div className="chat-history" ref={listRef}>
         {messages.map((m, idx) => (

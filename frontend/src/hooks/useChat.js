@@ -7,6 +7,7 @@ export const useChat = () => {
   ]);
   const [status, setStatus] = useState("checking");
   const [loading, setLoading] = useState(false);
+  const [persona, setPersona] = useState("concise_career_coach");
 
   useEffect(() => {
     health()
@@ -21,7 +22,8 @@ export const useChat = () => {
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
     try {
-      const data = await chat(trimmed);
+      const history = [...messages, userMsg];
+      const data = await chat(trimmed, history, persona);
       const answer = data?.answer || "No response.";
       setMessages((prev) => [...prev, { role: "assistant", text: answer }]);
     } catch (err) {
@@ -34,7 +36,7 @@ export const useChat = () => {
     }
   };
 
-  return { messages, status, loading, sendMessage };
+  return { messages, status, loading, sendMessage, persona, setPersona };
 };
 
 export default useChat;

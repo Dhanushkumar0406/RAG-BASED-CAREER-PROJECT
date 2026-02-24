@@ -28,13 +28,17 @@ def chat():
     from app.services.llm_service import generate_response
     payload = request.get_json(silent=True) or {}
     question = (payload.get("question") or "").strip()
+    history = payload.get("history") or []
+    persona = payload.get("persona") or None
     if not question:
         return jsonify({"error": "question is required"}), 400
 
     pipeline = _get_pipeline()
     try:
         context_text, hits = pipeline.retrieve(question)
-        answer, model_used = generate_response(context_text, question)
+        answer, model_used = generate_response(
+            context_text, question, history=history, persona=persona
+        )
     except Exception as exc:  # fallback so frontend gets a friendly message
         return jsonify({"error": str(exc)}), 502
 

@@ -66,6 +66,8 @@ body {
   gap: 8px;
   color: var(--muted);
   font-size: 13px;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .status-dot {
@@ -81,6 +83,24 @@ body {
 .status-dot.warn {
   background: #f59e0b;
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+
+.persona {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.persona label {
+  color: var(--muted);
+  font-size: 12px;
+}
+.persona select {
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 13px;
 }
 
 .chat-history {
